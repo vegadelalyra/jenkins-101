@@ -13,5 +13,9 @@ spec:
       port: 50000
       targetPort: 50000
       nodePort: 30001
+    - name: ssh
+      port: 22
+      targetPort: 22
+      nodePort: 30002
   selector:
     app: jenkins
