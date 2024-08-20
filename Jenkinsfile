@@ -5,29 +5,36 @@ pipeline {
             }
       }
     triggers {
-        pollSCM 'h/5 * * * *'
+        pollSCM 'H/5 * * * *'
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 echo "Building.."
-                sh '''
-                cd myapp
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r requirements.txt
-                '''
+                dir('myapp') {
+                    sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                    '''
+                }
             }
         }
         stage('Test') {
             steps {
                 echo "Testing.."
-                sh '''
-                cd myapp
-                . venv/bin/activate
-                python3 hello.py
-                python3 hello.py --name=Brad
-                '''
+                dir('myapp') {
+                    sh '''
+                    . venv/bin/activate
+                    python3 hello.py
+                    python3 hello.py --name=Brad
+                    '''
+                }
             }
         }
         stage('Deliver') {
